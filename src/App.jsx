@@ -3,38 +3,37 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useMemo } from "react";
 import { Experience } from "./components/Experience";
+// const created=(state) =>
+//   {
+//     console.log(state.gl);
+//   }
 
-export const Controls = {
-  forward: "forward",
-  back: "back",
-  left: "left",
-  right: "right",
-  jump: "jump",
-};
+// const created=(scene) =>
+//   {
+//     scene.background=new THREE.Color('red');
+//   }
 
+const created=({gl}) =>
+{
+  gl.setClearColor('#ff0000',1);
+}
 function App() {
-  const map = useMemo(
-    () => [
-      { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
-      { name: Controls.back, keys: ["ArrowDown", "KeyS"] },
-      { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
-      { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
-      { name: Controls.jump, keys: ["Space"] },
-    ],
-    []
-  );
-
   return (
-    <KeyboardControls map={map}>
-      <Canvas shadows camera={{ position: [10, 10, 10], fov: 30 }}>
-        <color attach="background" args={["#ececec"]} />
-        <Suspense>
-          <Physics debug>
-            <Experience />
-          </Physics>
-        </Suspense>
-      </Canvas>
-    </KeyboardControls>
+    <Canvas camera={ {
+      fov:45,
+      near:0.1,
+      far:200,
+      position: [0, 1, 5]
+    }} shadows
+    onCreated={created} 
+    >
+      <Suspense>
+      <Physics debug gravity={[0,-1.6,0]}>
+        <Experience />
+      </Physics>
+      </Suspense>
+    </Canvas>
+
   );
 }
 
